@@ -45,9 +45,8 @@ url_pattern = re.compile(r'https?://\S+')
 def create_daily_brief_image(date_str):
     img = Image.new('RGB', (1080, 1920), color='black')
     draw = ImageDraw.Draw(img)
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current file
-    font_path_h = os.path.join(BASE_DIR, "fonts", "ProximaNova-Bold.ttf")
-    font_path_sh = os.path.join(BASE_DIR, "fonts", "ProximaNova-Regular.ttf")
+    font_path_h = "fonts/ProximaNova-Bold.ttf"
+    font_path_sh = "fonts/ProximaNova-Regular.ttf"
     font_size_h = 45
     font_h = ImageFont.truetype(font_path_sh, font_size_h)
     font_size_sh = 110
@@ -185,8 +184,7 @@ async def create_story_image(title: str, keyword: str, image_url: str, bullet_po
     title_bg_height = 700
     title_img = Image.new('RGB', (1080, title_bg_height), color='black')
     draw = ImageDraw.Draw(title_img)
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current file
-    font_path = os.path.join(BASE_DIR, "fonts", "OpenSans-Bold.ttf")
+    font_path = "fonts/OpenSans-Bold.ttf"
     font_size = 70
     font = ImageFont.truetype(font_path, font_size)
     keyword_font = ImageFont.truetype(font_path, 50)  # Smaller font size for keyword
@@ -242,8 +240,7 @@ async def create_story_image(title: str, keyword: str, image_url: str, bullet_po
         draw_bullets = ImageDraw.Draw(bullet_img)
         bullet_img.paste(title_img, (0, 150))  # Paste the title area to the bullet image
         bullet_y = current_h + 200  # Start drawing bullets slightly below the title
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current file
-        font_path_b = os.path.join(BASE_DIR, "fonts", "ProximaNova-Regular.ttf")
+        font_path_b = "fonts/ProximaNova-Regular.ttf"
         font_size_b = 50
         font_b = ImageFont.truetype(font_path_b, font_size_b)
         image_width = 1080  # Width of the image being drawn on
@@ -412,4 +409,9 @@ app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), auto_process_m
 app.add_handler(CommandHandler('today', today))
 app.add_handler(CommandHandler('help', help_command))
 
-app.run_polling()
+app.run_webhook(
+    listen="0.0.0.0",
+    port=int(os.environ.get("PORT", 8443)),
+    url_path=telegram_bot_token,
+    webhook_url=f"{os.environ.get('RENDER_EXTERNAL_URL')}/{telegram_bot_token}"
+)
