@@ -4,3 +4,4 @@ beautifulsoup4
 Pillow
 nltk
 openai
+python-telegram-bot[webhooks]
