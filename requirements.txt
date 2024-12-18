@@ -1,0 +1,6 @@
+python-telegram-bot
+requests
+beautifulsoup4
+Pillow
+nltk
+openai
